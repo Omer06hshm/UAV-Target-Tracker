@@ -38,7 +38,7 @@ def main():
     issues = github("GET", f"/repos/{REPO}/issues",
                     params={"state": "open", "labels": "tony-ready", "per_page": 30})
     for issue in issues:
-        if "pull_request" in issue:
+        if "pull_request" in issue or any(label["name"] == "tony-done" for label in issue["labels"]):
             continue
         number = issue["number"]
         task = f"Engineering task #{number}: {issue['title']}\n{issue.get('body') or ''}\nCall both specialist agents and prepare a reviewed response."
